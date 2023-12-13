@@ -1,7 +1,7 @@
 
 
 def get_photos_info(vk_user_id):
-    vk_session = vk_api.VkApi(token="YOUR_TOKEN")  # 'YOUR_TOKEN' заменить на токен ВК
+    vk_session = vk_api.VkApi(token="vk1.a.HX8Jv0OUQygYK-5FsAJfM8GF2tf6xbgYrCa62mO3OMftk3O55--M8RPmZbdVAdKIZr9utTZQ4mgRLDUNi39XNrk2g8dJ3Ug_uXGQqd5m_WS8GeL_8xEvAi0ru_qgESWeiycGUZPeAjca7Kjguu_dHh_cbQihOEf55MaEiq2zQtES6suavfyUmOnW4vHauZht&expires_in=86400&user_id=838487187")  
     vk = vk_session.get_api()
 
     try:
@@ -15,6 +15,7 @@ def get_photos_info(vk_user_id):
         owner_id=vk_user_id, album_id="profile", photo_sizes=1, extended=1
     )["items"]
     photos_info = {}
+    
 
     for i in range(len(photos)):
         photo = sorted(
@@ -78,7 +79,7 @@ def save_photos_to_disk(photos_info, user_name, yandex_disk_token):
 
 
 def main():
-    vk_user_id = input("Введите id пользователя вконтакте: ")
+    vk_user_id = input("Введите id пользователя Вконтакте: ")
     yandex_disk_token = input("Введите токен Яндекс.Диска: ")
 
     photos_info, user_name = get_photos_info(vk_user_id)
