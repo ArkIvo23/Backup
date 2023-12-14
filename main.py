@@ -1,7 +1,5 @@
-
-
-def get_photos_info(vk_user_id):
-    vk_session = vk_api.VkApi(token="vk1.a.HX8Jv0OUQygYK-5FsAJfM8GF2tf6xbgYrCa62mO3OMftk3O55--M8RPmZbdVAdKIZr9utTZQ4mgRLDUNi39XNrk2g8dJ3Ug_uXGQqd5m_WS8GeL_8xEvAi0ru_qgESWeiycGUZPeAjca7Kjguu_dHh_cbQihOEf55MaEiq2zQtES6suavfyUmOnW4vHauZht&expires_in=86400&user_id=838487187")  
+def get_photos_info(vk_user_id, vk_api=None):
+    vk_session = vk_api.VkApi(token="vk1.a.5XsbQl_K1eEtPC9f33qgZvgI1kYYaYZPnXMO-osy9Wz6vI8P3JgJGLyh3zpxWWWXS2e2OamfIIcrxJD6OmsIFnAGHklBJGUA0IOaZNEOWI9HEXqWf7e-XrF1GjkX5LzzcOUkP8Z7yAm0xyYNB3ZXCe330iwfWCmBPLeS0iMiz-ZYMcTErdEsxobQS4JFkiHs&expires_in=86400&user_id=838487187")  
     vk = vk_session.get_api()
 
     try:
@@ -11,21 +9,14 @@ def get_photos_info(vk_user_id):
         sys.exit()
 
     user_name = user_info["first_name"] + "_" + user_info["last_name"]
-    photos = vk.photos.get(
-        owner_id=vk_user_id, album_id="profile", photo_sizes=1, extended=1
-    )["items"]
+    photos = vk.photos.get(owner_id=vk_user_id, album_id="profile", photo_sizes=1, extended=1)["items"]
     photos_info = {}
     
-
     for i in range(len(photos)):
-        photo = sorted(
-            photos[i]["sizes"], key=lambda x: (x["width"], x["height"]), reverse=True
-        )[0]
+        photo = sorted(photos[i]["sizes"], key=lambda x: (x["width"], x["height"]), reverse=True)[0]
         url = photo["url"]
         likes = str(photos[i]["likes"]["count"])
-        date = datetime.utcfromtimestamp(photos[i]["date"]).strftime(
-            "%Y-%m-%d_%H-%M-%S"
-        )
+        date = datetime.utcfromtimestamp(photos[i]["date"]).strftime("%Y-%m-%d_%H-%M-%S")
         file_name = likes + "_" + date + ".jpg"
         size = photo["type"]
 
@@ -43,12 +34,10 @@ def save_photos_to_disk(photos_info, user_name, yandex_disk_token):
     upload_url = "https://cloud-api.yandex.net/v1/disk/resources/upload"
 
     try:
-        requests.put(
-            "https://cloud-api.yandex.net/v1/disk/resources",
+        requests.put("https://cloud-api.yandex.net/v1/disk/resources",
             headers=headers,
             params={"path": folder_name},
-            timeout=10,
-        )
+            timeout=10)
     except:
         print("Ошибка при создании папки на Яндекс.Диске")
         sys.exit()
